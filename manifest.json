@@ -1,0 +1,34 @@
+{
+  "name": "LiuWei's first extension",
+  "version": "1.0",
+  "manifest_version": 2,
+  "content_scripts": [
+    {
+      "matches": [
+        "<all_urls>"
+      ],
+      "js": [
+        "frame/jQuery.min.js",
+        "index.js",
+        "cursorPosition.js"
+      ],
+      "css": [
+        "css/cursorPosition.css"
+      ]
+    }
+  ],
+  // 权限申请
+  "permissions":
+  [
+    "contextMenus", // 右键菜单
+    "tabs", // 标签
+    "notifications", // 通知
+    "webRequest", // web请求
+    "webRequestBlocking",
+    "storage", // 插件本地存储
+    "http://*/*", // 可以通过executeScript或者insertCSS访问的网站
+    "https://*/*" // 可以通过executeScript或者insertCSS访问的网站
+  ],
+  // 插件主页，这个很重要，不要浪费了这个免费广告位
+  "homepage_url": "https://www.hautlw.xin/"
+}

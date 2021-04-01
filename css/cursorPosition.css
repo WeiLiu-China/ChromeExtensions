@@ -1,0 +1,7 @@
+.newDiv {
+    position: absolute;
+    background: greenyellow;
+    color: white;
+    width: 100px;
+    height: 50px;
+}
