@@ -1,5 +1,6 @@
 /**************************************************/
-
+let right = 0;
+let left = 0;
 var btnArray = new Array(); //或者写成：var btns= [];
 
 jQuery('p').each(function (key, value) {
@@ -25,8 +26,6 @@ $(document).ready(function () {
 function mousemove(e) {
     e = e || window.event;
     if (e.pageX || e.pageY) {
-        /*console.log("e.pageX" + e.pageX);
-        console.log("e.pageY" + e.pageY);*/
         movex = e.pageX;
         movey = e.pageY
     }
@@ -35,9 +34,16 @@ function mousemove(e) {
 
 function creatDiv(x, y) {
     $(".newDiv").remove();
-    let str = ("<div class=\'newDiv\'>" + x + 10 + "," + y + "</div>");
+    //鼠标坐标+眼动坐标
+    let str = ("<div class=\'newDiv\'>" + x + 10 + "," + y +
+        "<br>" + left + "," + right + "</br>" +
+        "</div>");
     $("body").append(str);
-    $(".newDiv").css("left", x + 20 + "px").css("top", y + 20 + "px").css("positive:absolute")/*.css("z-index","9999999999")*/;
+    console.log("X和Y:  " + x + "  , " + y);
+    console.log("left和right:  " + left + "  , " + right);
+    var test = parseInt(left) + parseInt("20");
+    console.log(test);
+    $(".newDiv").css("left", parseInt(left) + parseInt("20") + +"px").css("top", parseInt(right) + parseInt("20") + "px").css("positive:absolute")/*.css("z-index","9999999999")*/;
 }
 
 
@@ -64,8 +70,8 @@ $(document).ready(function () {
  * @returns {void}
  */
 function selectCursorWord(e) {
-    const x = e.clientX
-    const y = e.clientY
+    const x = left; //e.clientX; //left;
+    const y = right;// e.clientY; //right;
 
     let offsetNode;
     let offset;
@@ -131,7 +137,10 @@ if ("WebSocket" in window) {
     };
     ws.onmessage = function (evt) {
         var received_msg = evt.data;
-        console.log("眼动返回坐标：  " + received_msg) + "\n";
+        var array = received_msg.split(',');
+        left = array[0];
+        right = array[1];
+        console.log("眼动返回坐标：  " + array[0] + "," + array[1]) + "\n";
         //document.getElementById("showMes").value += received_msg + "\n";
     };
     ws.onclose = function () {
@@ -150,4 +159,3 @@ function func() {
 setInterval(function () {
     func();
 }, 100)
-
