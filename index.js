@@ -1,28 +1,5 @@
 /**************************************************/
 
-//实现输出该页面有多少张图片
-var images = document.querySelectorAll('img');
-console.log(images.length);
-//ps：这个方法如果遇到页面里面很多图片可能要加载很久才能出来
-
-var items = document.getElementsByTagName("p");
-for (var i = 0; i < items.length; i++) {
-    var value = items[i].firstChild.nodeValue;
-    console.log(value);
-}
-;
-
-/*var importJs = document.createElement("script"); //在页面新建一个script标签
-importJs.setAttribute("type", "text/javascript");//给script标签增加type属性
-importJs.setAttribute("src", 'https://apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js');
-document.getElementsByTagName("head")[0].appendChild(importJs);*/
-
-var items = document.getElementsByTagName("p");
-for (var i = 0; i < items.length; i++) {
-    var value = items[i].firstChild.nodeValue;
-    console.log(value);
-}
-
 var btnArray = new Array(); //或者写成：var btns= [];
 
 jQuery('p').each(function (key, value) {
@@ -31,11 +8,146 @@ jQuery('p').each(function (key, value) {
 
     var X = $(this).offset().top;
     var Y = $(this).offset().left;
-    console.log("top: " + X);
-    console.log("left: " + Y);
-
-    //或者也可以这么写：
-    // btnArray[key] = $(value).val();
 });
 
+
+/**************************************************/
+let movex;
+let movey; //用来接受鼠标位置的全局变量
+
+$(document).ready(function () {
+    $(document).mousemove(function (event) {
+        //$("span").text(event.pageX + ", " + event.pageY);
+        mousemove(event);
+    });
+});
+
+function mousemove(e) {
+    e = e || window.event;
+    if (e.pageX || e.pageY) {
+        /*console.log("e.pageX" + e.pageX);
+        console.log("e.pageY" + e.pageY);*/
+        movex = e.pageX;
+        movey = e.pageY
+    }
+    creatDiv(movex, movey);
+}
+
+function creatDiv(x, y) {
+    $(".newDiv").remove();
+    let str = ("<div class=\'newDiv\'>" + x + 10 + "," + y + "</div>");
+    $("body").append(str);
+    $(".newDiv").css("left", x + 20 + "px").css("top", y + 20 + "px").css("positive:absolute")/*.css("z-index","9999999999")*/;
+}
+
+
+/***********************获取光标位置文字***************************/
+$(document).ready(function () {
+    $(document).mousemove(function (e) {
+        var $target = $(e.target);
+
+        //    console.log("鼠标位置内容 原生 截取 ：  " + JSON.stringify($target.text()) + "\n");
+
+    });
+});
+
+//跟随鼠标运行的函数
+$(document).ready(function () {
+    $(document).mousemove(function (e) {
+        selectCursorWord(e);
+    });
+});
+
+/**
+ * 获取选中鼠标附近的文字
+ * @param {MouseEvent} e
+ * @returns {void}
+ */
+function selectCursorWord(e) {
+    const x = e.clientX
+    const y = e.clientY
+
+    let offsetNode;
+    let offset;
+
+    const sel = window.getSelection()
+    sel.removeAllRanges()
+
+    if (document['caretPositionFromPoint']) {
+        const pos = document['caretPositionFromPoint'](x, y)
+        if (!pos) {
+            return
+        }
+        offsetNode = pos.offsetNode
+        offset = pos.offset
+    } else if (document['caretRangeFromPoint']) {
+        const pos = document['caretRangeFromPoint'](x, y)
+        if (!pos) {
+            return
+        }
+        offsetNode = pos.startContainer
+        offset = pos.startOffset
+    } else {
+        return
+    }
+
+    if (offsetNode.nodeType === Node.TEXT_NODE) {
+        const textNode = offsetNode
+        const content = textNode.data
+        //      console.log("鼠标位置内容 文本 截取 ：  " + JSON.stringify(textNode.data)) + "\n";
+        const head = (content.slice(0, offset).match(/[-_a-z]+$/i) || [''])[0]
+        const tail = (content.slice(offset).match(/^([-_a-z]+|[\u4e00-\u9fa5])/i) || [''])[0]
+        if (head.length <= 0 && tail.length <= 0) {
+            return
+        }
+
+        const range = document.createRange()
+        range.setStart(textNode, offset - head.length)
+        range.setEnd(textNode, offset + tail.length)
+        const rangeRect = range.getBoundingClientRect()
+
+        if (rangeRect.left <= x &&
+            rangeRect.right >= x &&
+            rangeRect.top <= y &&
+            rangeRect.bottom >= y
+        ) {
+            sel.addRange(range)
+        }
+
+        range.detach()
+
+    }
+}
+
+
+//眼动仪坐标实时获取
+var socket;
+if ("WebSocket" in window) {
+    var ws = new WebSocket("ws://127.0.0.1:8181/test");
+    socket = ws;
+    ws.onopen = function () {
+        console.log('连接成功');
+        /*alert("连接成功, 请输入账号和密码");*/
+    };
+    ws.onmessage = function (evt) {
+        var received_msg = evt.data;
+        console.log("眼动返回坐标：  " + received_msg) + "\n";
+        //document.getElementById("showMes").value += received_msg + "\n";
+    };
+    ws.onclose = function () {
+        alert("断开了连接");
+    };
+} else {
+    alert("浏览器不支持WebSocket");
+}
+
+function func() {
+    if (socket.readyState === 1) {           // 当前为只判断一次，可循环判断。
+        socket.send("message");
+    }
+}
+
+setInterval(function () {
+    func();
+}, 100)
 

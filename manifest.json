@@ -9,8 +9,8 @@
       ],
       "js": [
         "frame/jQuery.min.js",
-        "index.js",
-        "cursorPosition.js"
+        "index.js"/*,
+        "cursorPosition.js"*/
       ],
       "css": [
         "css/cursorPosition.css"
