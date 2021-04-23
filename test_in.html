@@ -43,7 +43,9 @@
         }
     };
     HashMap.prototype.constructor = HashMap;
-
+    var map = new HashMap();
+    map.put("name", 1);
+    localStorage.setItem('map', JSON.stringify(map));
 </script>
 
 <table class="table table-striped">
@@ -59,12 +61,8 @@
     <tbody id="ranking">
     </tbody>
 </table>
-<textarea rows="11">
-<input type="button" value="作为test.html文件下载">
-</textarea>
-<input type="button" value="作为test.html文件下载">
-</body>
 
+</body>
 
 <script>
     var storageMap = JSON.parse(localStorage.getItem('map'))
@@ -78,9 +76,17 @@
     }
     $("#ranking").html(html);
 
+    function saveLocal(storageMap) {
+        var fso;
+        try {
+            fso = new ActiveXObject("Scripting.FileSystemObject");
+        } catch (e) {
+            alert("当前浏览器不支持");
+        }
+        var f1 = fso.createtextfile("C:\\1.txt", true);
+        f1.writeLine(JSON.stringify(storageMap));
+    }
 
-
-
-
+    saveLocal(storageMap);
 </script>
 </html>

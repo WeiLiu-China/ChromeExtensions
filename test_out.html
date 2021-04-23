@@ -43,7 +43,8 @@
         }
     };
     HashMap.prototype.constructor = HashMap;
-
+    let item = localStorage.getItem('map');
+    alert(JSON.stringify(item));
 </script>
 
 <table class="table table-striped">
@@ -59,12 +60,8 @@
     <tbody id="ranking">
     </tbody>
 </table>
-<textarea rows="11">
-<input type="button" value="作为test.html文件下载">
-</textarea>
-<input type="button" value="作为test.html文件下载">
-</body>
 
+</body>
 
 <script>
     var storageMap = JSON.parse(localStorage.getItem('map'))
@@ -77,10 +74,5 @@
         html += "</tr>";
     }
     $("#ranking").html(html);
-
-
-
-
-
 </script>
 </html>
