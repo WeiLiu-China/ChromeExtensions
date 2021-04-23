@@ -1,6 +1,6 @@
 /**************************************************/
 let movex;
-let movey; //用来接受鼠标位置的全局变量
+let movey; //用来接受眼睛位置的全局变量
 
 $(document).ready(function () {
     $(document).mousemove(function (event) {
