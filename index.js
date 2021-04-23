@@ -35,6 +35,8 @@ function creatDiv() {
     let str = ("<div class=\'newDiv\'>" + x_10 + "," + parseInt(y) +
         "<br>" + left + "," + right + "</br>" +
         "</div>");
+    //console.log("X和Y:  " + x_10 + "  , " + y);
+    // console.log("left和right:  " + left + "  , " + right);
     var left_20 = parseInt(left) + parseInt("25");
     var right_20 = parseInt(right + parseInt("25"));
     $(".newDiv").remove();
@@ -164,15 +166,29 @@ function setPosition(received_msg) {
     }
     if (right_x !== "nan" || left_x !== "nan") {
         //TODObubian
-        var top = screen.availHeight - window.innerHeight;
+        /*console.log("  window.screenTop  " + window.screenTop);
+        console.log("  window.innerHeight  " + window.innerHeight);
+        console.log("  window.outerHeight  " + window.outerHeight);
+
+
+        console.log("  window.screenLeft  " + window.screenLeft);
+        console.log("  window.availWidth  " + screen.availWidth);*/
+
+        /* window.screenTop  0
+index.js:166   window.innerHeight  376
+index.js:167   window.outerHeight  1040
+index.js:169   window.availHeight  1040
+index.js:170   window.height  1080
+index.js:172   window.screenLeft  -1920
+index.js:173   window.availWidth  1920 */
+        var top = parseInt(window.height) - parseInt(window.availHeight);
         left = parseInt(left * 1920);
-        right = parseInt(right * 1080) - top;
+        right = parseInt(right * 1080) - parseInt(40);
         right = right.toFixed(one);
         left = left.toFixed(one);
-        console.log("眼动平均坐标 ：  " + left + "," + right) + "\n";
-        console.log("screen.availHeight - window.innerHeight ：  " + top) + "\n";
+        //console.log("screen.availHeight - window.innerHeight ：  " + top) + "\n";
+        //console.log("眼动平均坐标 ：  " + left + "," + right) + "\n";
     }
-
 
 }
 
@@ -188,73 +204,37 @@ setInterval(function () {
 
 
 function HashMap() {
-    /** Map 大小 **/
-    var size = 0;
-    /** 对象 **/
-    var entry = new Object();
+    this.map = {};
+}
 
-    /** 存 **/
-    this.put = function (key, value) {
-        if (!this.containsKey(key)) {
-            size++;
+HashMap.prototype = {
+    put: function (key, value) {// 向Map中增加元素（key, value)
+        this.map[key] = value;
+    },
+    get: function (key) { //获取指定Key的元素值Value，失败返回Null
+        if (this.map.hasOwnProperty(key)) {
+            return this.map[key];
         }
-        entry[key] = value;
-    }
-
-    /** 取 **/
-    this.get = function (key) {
-        if (this.containsKey(key)) {
-            return entry[key];
-        } else {
-            return null;
-        }
-    }
-
-    /** 删除 **/
-    this.remove = function (key) {
-        if (delete entry[key]) {
-            size--;
-        }
-    }
-
-    /** 是否包含 Key **/
-    this.containsKey = function (key) {
-        return (key in entry);
-    }
-
-    /** 是否包含 Value **/
-    this.containsValue = function (value) {
-        for (var prop in entry) {
-            if (entry[prop] == value) {
-                return true;
-            }
+        return null;
+    },
+    remove: function (key) { // 删除指定Key的元素，成功返回True，失败返回False
+        if (this.map.hasOwnProperty(key)) {
+            return delete this.map[key];
         }
         return false;
-    }
-
-    /** 所有 Value **/
-    this.values = function () {
-        var values = new Array(size);
-        for (var prop in entry) {
-            values.push(entry[prop]);
+    },
+    removeAll: function () {  //清空HashMap所有元素
+        this.map = {};
+    },
+    keySet: function () { //获取Map中所有KEY的数组（Array）
+        var _keys = [];
+        for (var i in this.map) {
+            _keys.push(i);
         }
-        return values;
+        return _keys;
     }
-
-    /** 所有 Key **/
-    this.keys = function () {
-        var keys = new Array(size);
-        for (var prop in entry) {
-            keys.push(prop);
-        }
-        return keys;
-    }
-
-    /** Map Size **/
-    this.size = function () {
-        return size;
-    }
-}
+};
+HashMap.prototype.constructor = HashMap;
 
 var map = new HashMap();
 
@@ -269,5 +249,5 @@ function asynchronousSave(text) {
 
 
 setTimeout(function () {
-    console.error("30秒观看排行  ：  " + JSON.stringify(map)) + "\n";
+    console.info("30秒观看排行  ：  " + JSON.stringify(map)) + "\n";
 }, 30000);
