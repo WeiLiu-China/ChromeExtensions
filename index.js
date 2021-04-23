@@ -2,7 +2,7 @@
 let right = 0;
 let left = 0;
 var btnArray = new Array(); //或者写成：var btns= [];
-const time = 50;
+const time = 100;
 
 jQuery('p').each(function (key, value) {
 
@@ -270,4 +270,4 @@ function asynchronousSave(text) {
 
 setTimeout(function () {
     console.error("30秒观看排行  ：  " + JSON.stringify(map)) + "\n";
-}, 3000);
+}, 30000);
