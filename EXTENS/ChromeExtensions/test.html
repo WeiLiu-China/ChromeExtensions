@@ -1,0 +1,79 @@
+<!doctype html>
+<html xmlns="http://www.w3.org/1999/html">
+<head>
+    <meta charset="utf-8">
+    <title>test2</title>
+    <script src="frame/jQuery.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="frame/bootstrap/css/bootstrap.css">
+    <script src="frame/bootstrap/js/bootstrap.js"></script>
+
+</head>
+
+<body>
+<script>
+    function HashMap() {
+        this.map = {};
+    }
+
+    HashMap.prototype = {
+        put: function (key, value) {// 向Map中增加元素（key, value)
+            this.map[key] = value;
+        },
+        get: function (key) { //获取指定Key的元素值Value，失败返回Null
+            if (this.map.hasOwnProperty(key)) {
+                return this.map[key];
+            }
+            return null;
+        },
+        remove: function (key) { // 删除指定Key的元素，成功返回True，失败返回False
+            if (this.map.hasOwnProperty(key)) {
+                return delete this.map[key];
+            }
+            return false;
+        },
+        removeAll: function () {  //清空HashMap所有元素
+            this.map = {};
+        },
+        keySet: function () { //获取Map中所有KEY的数组（Array）
+            var _keys = [];
+            for (var i in this.map) {
+                _keys.push(i);
+            }
+            return _keys;
+        }
+    };
+    HashMap.prototype.constructor = HashMap;
+
+</script>
+
+<table class="table table-striped">
+    <caption>排行</caption>
+    </br>
+    </br>
+    <thead>
+    <tr>
+        <th>次数</th>
+        <th>内容</th>
+    </tr>
+    </thead>
+    <tbody id="ranking">
+    </tbody>
+</table>
+
+</body>
+
+<script>
+    var storageMap = JSON.parse(localStorage.getItem('map'));
+    alert("map:" + JSON.stringify(storageMap));
+
+    var html = "";
+    for (let key in storageMap.map) {
+        console.log(key + '---' + storageMap[key])
+        html += "<tr>";
+        html += "<td>" + storageMap.map[key] + "</td>";
+        html += "<td>" + key + "</td>";
+        html += "</tr>";
+    }
+    $("#ranking").html(html);
+</script>
+</html>

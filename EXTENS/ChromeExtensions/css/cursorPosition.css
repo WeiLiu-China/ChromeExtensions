@@ -1,0 +1,24 @@
+.newDiv {
+    position: absolute;
+    background: rebeccapurple;
+    color: white;
+    /*width: 150px;
+    height: 60px;*/
+    width: 1px;
+    height: 1px;
+}
+
+.eyeDiv {
+    position: absolute;
+    background: red;
+    color: white;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+}
+
+::selection {
+    background: white;
+    color: red;
+
+}
